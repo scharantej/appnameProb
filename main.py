@@ -1,30 +1,50 @@
  
 # Import necessary libraries
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 
 # Create a Flask app
 app = Flask(__name__)
 
-# Define the routes
+# Define the main route
 @app.route('/')
 def index():
+    """Renders the main page of the website."""
     return render_template('index.html')
 
-@app.route('/about')
-def about():
-    return render_template('about.html')
+# Define the lessons route
+@app.route('/lessons')
+def lessons():
+    """Renders the lessons page of the website."""
+    return render_template('lessons.html')
 
-@app.route('/resources')
-def resources():
-    return render_template('resources.html')
+# Define the history route
+@app.route('/history')
+def history():
+    """Renders the history page of the website."""
+    return render_template('history.html')
 
-@app.route('/support')
-def support():
-    return render_template('support.html')
+# Define the quiz route
+@app.route('/quiz')
+def quiz():
+    """Renders the quiz page of the website."""
+    return render_template('quiz.html')
 
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
+# Define the submit quiz route
+@app.route('/submit_quiz', methods=['POST'])
+def submit_quiz():
+    """Handles the submission of the quiz and provides feedback to the user."""
+
+    # Get the user's answers from the request
+    answers = request.form.getlist('answer')
+
+    # Check the user's answers and calculate the score
+    score = 0
+    for answer in answers:
+        if answer == 'correct_answer':
+            score += 1
+
+    # Provide feedback to the user
+    return render_template('quiz_results.html', score=score)
 
 # Run the app
 if __name__ == '__main__':
